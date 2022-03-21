@@ -1,5 +1,6 @@
 word = input("Input the word to crypt: ")
 numberedWord = []
+# Switch to convert the word into an array of numbers
 for i in range(len(word)):
     letter = word[i]
     match letter:
