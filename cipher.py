@@ -7,7 +7,7 @@ def wordToNumbers(word):
     '''
     Converts the word into an array of numbers
     :param word: initial word
-    :return: an array of numbers which correspond to a character
+    :return: array of numbers which correspond to their characters
     '''
     numberedWord = []
     for i in range(len(word)):
@@ -150,53 +150,63 @@ def numbersToWord(decryptedArr):
 
 def matrixMultiplication(curMatrix, multiplicator):
     '''
-    funсtion for matrix multiplication of 2 matrix and encoded matrix
+    Matrix multiplication
     :param cur_matrix: matrix of 2 symbols of original text (1x2)
+    :prarm key: standart key (or reversed key)
     :return: matrix of encoded symbols (1x2)
     '''
     resultMatrix = []
     multMatrix = np.matmul(curMatrix, multiplicator)
     for i in range(2):
+        #29 is the alphabet's length
         resultMatrix.append(multMatrix[i]%29)
-    print(resultMatrix)
     return resultMatrix
 
+
+def toOutput(array):
+    '''
+    Writes array values to a string for better-looking output
+    :param array: crypted or decrypted array
+    '''
+    toOutput = ''
+    for i in range(len(array)):
+        toOutput += array[i]
+    print(toOutput)
+
+
+# Algorythm
 option = int(input('1:cipher\n2:decipher\n'))
 
 
 if option == 1:
     word = input('word to cipher: ')
     if (len(word)%2) != 0:
-        word = word + 'Z'
+        #Adding a single character to make the matrix multiplication possible
+        word += 'Z'
     numberedWord = wordToNumbers(word)
-    print(numberedWord)
     cryptedArr = []
     for i in range(0, len(numberedWord), 2):
+        #Temporary variable to hold 2 numbers for multiplication
         mat = [numberedWord[i], numberedWord[i+1]]
+        #Writing values to the ending array as numbers
         cryptedArr.append(matrixMultiplication(mat, key)[0])
         cryptedArr.append(matrixMultiplication(mat, key)[1])
-    print(cryptedArr)
+    #Converting numbers to characters
     cryptedWord = numbersToWord(cryptedArr)
-    toOutput = ''
-    for i in range(len(cryptedWord)):
-        toOutput += cryptedWord[i]
-    print(toOutput)
+    #Printing the final output
+    toOutput(cryptedWord)
 
 
 elif option == 2:
     word = input('Enter the values: ')
     length = len(word)%2
     if (length) != 0:
-        word = word + 'Z'
+        word += 'Z'
     numberedWord = wordToNumbers(word)
     decryptedArr = []
     for i in range(0, len(numberedWord), 2):
         mat = [numberedWord[i], numberedWord[i+1]]
         decryptedArr.append(matrixMultiplication(mat,invertedKey)[0])
         decryptedArr.append(matrixMultiplication(mat,invertedKey)[1])
-    # print(decryptedArr)
     decryptedWord = numbersToWord(decryptedArr)
-    toOutput = ''
-    for i in range(len(decryptedWord)):
-        toOutput += decryptedWord[i]
-    print(toOutput)
+    toOutput(decryptedWord)
